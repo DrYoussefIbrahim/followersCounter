@@ -2,7 +2,7 @@
   Intstagram followers counter. Sets up WiFi AP to configure account and WiFi settings through a captive portal.
   Stores credintials in non-volatile memory for subsequent uses.
   This accompanies the NANO firmware file NANO_LIKES_V3
-  by Youssef Ibrahim on 16 June, 2020
+  by Youssef Ibrahim on 25 September, 2020
 */
 
 #include <WiFi.h>
