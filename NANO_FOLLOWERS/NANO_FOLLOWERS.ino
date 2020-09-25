@@ -1,3 +1,10 @@
+/*
+  Intstagram followers counter - Mechanical display driver.
+  Receives digits to display through software serial interface on pins 3 and 4
+  This accompanies the ESP32 firmware file ESP32_FOLLOWERS
+  by Youssef Ibrahim on 25 September, 2020
+*/
+
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 #include <Adafruit_NeoPixel.h>
@@ -66,6 +73,7 @@ void loop() {
       }
     }
   }
+  // Uncomment following code for debugging Serial interface. Send numbers directly through the serial monitor for testing.
   //  if (Serial.available()) {
   //    delay(1000);
   //    long input = Serial.parseInt();
@@ -80,7 +88,10 @@ void loop() {
 
 void nop() {}
 
-void stop_all() {
+void stop_all() { 
+  /*
+   * A function to stop all spinning digit servos with
+   */
   for (byte i = 0; i < 5; i++) {
     if (spinning[i]) {
       if (i == 4) {
@@ -100,6 +111,11 @@ void stop_all() {
 }
 
 int analog_grab(boolean request) {
+  /*
+   * A function to return an average measurment from the specficied analog pin.
+   * Arguments:
+   * request - A boolean input to specifiy analog pin of interest. Enter 0 for zero switch bus pin and 1 for digit switch bus pin
+   */
   int buf = 0;
   if (request) {
     for (byte i; i < 10 ; i++) {
@@ -115,6 +131,12 @@ int analog_grab(boolean request) {
 }
 
 void index_digits(boolean request, byte upTo) {
+  /*
+   * A function to index all digits to the zero position or the next digit position.
+   * Arguments:
+   *  request - A boolean input to specifiy analog pin of interest. Enter 0 for zero switch bus pin and 1 for digit switch bus pin
+   *  upTo - Specify the digit position up to which the digits will be index. Input range from 1 to 5
+   */
   if (upTo) {
     int state = 0;
     if (request) {
@@ -178,6 +200,11 @@ void index_digits(boolean request, byte upTo) {
 }
 
 void display_value(long input) {
+  /*
+   * The main function to display a number on the display. 
+   * Arguments:
+   *  input - The number to display. Input range 0 - 99999
+   */
   if (input != current_num) {
     int digits[5] = {input % 10, (input % 100) / 10, (input % 1000) / 100, (input % 10000) / 1000, (input % 100000) / 10000};
     digitalWrite(A3, LOW);
@@ -242,6 +269,20 @@ void display_value(long input) {
 }
 
 void set_light_color(long setting) {
+  /*
+   * A function to set the illuminiation setting and store it to the EEPROM.
+   * Arguments:
+   *  setting - The input code corresponding to the desired light setting. This is received from the ESP32 when button is pressed. 
+   *  Valid inputs:
+   *  1000000: Red
+   *  2000000: Green
+   *  3000000: Blue
+   *  4000000: Yellow
+   *  5000000: Cyan
+   *  6000000: Magenta
+   *  7000000: White
+   *  8000000: OFF
+   */
   switch (setting) {
     case 1000000: R = 1; G = 255; B = 255; break; //Red
     case 2000000: R = 255; G = 1; B = 255; break; //Green
@@ -249,7 +290,7 @@ void set_light_color(long setting) {
     case 4000000: R = 1; G = 1; B = 255; break; //Yellow
     case 5000000: R = 255; G = 1; B = 1; break; //Cyan
     case 6000000: R = 1; G = 255; B = 1; break; //Magenta
-    case 7000000: R = 1; G = 1; B = 3; break; //Whtie
+    case 7000000: R = 1; G = 1; B = 3; break; //White
     case 8000000: R = 255; G = 255; B = 255; break; //OFF
   }
   for (byte i = 0; i < 200; i++) {
