@@ -1,7 +1,7 @@
 /*
   Intstagram followers counter. Sets up WiFi AP to configure account and WiFi settings through a captive portal.
   Stores credintials in non-volatile memory for subsequent uses.
-  This accompanies the NANO firmware file NANO_LIKES_V3
+  This accompanies the NANO firmware file NANO_FOLLOWERS
   by Youssef Ibrahim on 25 September, 2020
 */
 
